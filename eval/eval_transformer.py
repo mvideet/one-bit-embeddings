@@ -1,7 +1,7 @@
 import torch
 from sentence_transformers import SentenceTransformer
 from transformer_onebit_ste import IdentityOneBitSTE, one_bit_quantization
-from dataset import create_eval_dataset, in_batch_negatives_collate_fn
+from .dataset import create_eval_dataset, in_batch_negatives_collate_fn
 from torch.utils.data import DataLoader
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -39,7 +39,7 @@ quantizer = IdentityOneBitSTE(
     noise_std=config.get("noise_std", 1e-3),
 ).to(device)
 
-quantizer.load_state_dict(torch.load("transformer_onebit_tanh.pth", map_location=device))
+quantizer.load_state_dict(torch.load("./models/transformer_onebit_tanh.pth", map_location=device))
 # breakpoint()
 print("Num Paramters", sum(p.numel() for p in quantizer.parameters() if p.requires_grad))
 # breakpoint()

@@ -1,7 +1,7 @@
 import torch
 from sentence_transformers import SentenceTransformer
 from groupwise_mlp import IdentitiyGroupwiseMLP, one_bit_quantization
-from dataset import create_eval_dataset, in_batch_negatives_collate_fn
+from .dataset import create_eval_dataset, in_batch_negatives_collate_fn
 from torch.utils.data import DataLoader
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -24,7 +24,7 @@ config = {
 
 quantizer = IdentitiyGroupwiseMLP(input_dim=config["input_dim"], output_dim=config["output_dim"], hidden_dim=config["hidden_dim"], num_groups=config["num_groups"], temperature=config["temperature"]).to(device)
 
-quantizer.load_state_dict(torch.load("groupwise_mlp_best.pth", map_location=device))
+quantizer.load_state_dict(torch.load("./models/groupwise_mlp_best.pth", map_location=device))
 # breakpoint()
 print("Num Paramters", sum(p.numel() for p in quantizer.parameters() if p.requires_grad))
 # breakpoint()
